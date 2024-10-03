@@ -1,3 +1,4 @@
+import { appEventEmitter } from '../../../constants/app-event';
 import { ForbiddenError } from '../../../constants/errors';
 import type { UserAuth } from '../../auth/domain/user-auth';
 import type { TicketChat } from '../domain/chat';
@@ -29,6 +30,10 @@ export namespace TicketChatService {
 
 		const data = CreateTicketChat.mkUnsafe({ dto, userAuth, ticket });
 		const chat = await TicketChatManager.add(data);
+		appEventEmitter.emit('ticket-chat-added', {
+			chat,
+			ticket: Ticket.toJson(ticket),
+		});
 		return chat;
 	};
 

@@ -20,7 +20,11 @@ export namespace Ticket {
 		assign: Set<UserId>;
 		seenBy: Set<UserId>;
 	}
-
+	export const toJson = (ticket: Ticket) => ({
+		...ticket,
+		assign: [...ticket.assign],
+		seenBy: [...ticket.seenBy],
+	});
 	export type Topic = (typeof Topic.all)[number];
 	export namespace Topic {
 		export const all = ['MyAccount'] as const;
