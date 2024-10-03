@@ -33,5 +33,5 @@ export namespace BoundedString {
 	export const zod = <MinLength extends number, MaxLength extends number>(
 		minLength: MinLength,
 		maxLength: MaxLength,
-	) => NonEmptyString.zod.refine(is(minLength, maxLength), `BoundedString`);
+	) => NonEmptyString.zod.refine(is(minLength, maxLength), 'BoundedString');
 }
