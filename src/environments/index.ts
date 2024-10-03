@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import { z } from 'zod';
 dotenv.config();
 
+export const PORT = process.env.PORT || 3000;
+
 // environments
 export const PRODUCTION_ENV = 'production' as const;
 export const DEVELOPMENT_ENV = 'development' as const;
