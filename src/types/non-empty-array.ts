@@ -4,9 +4,6 @@ export type NonEmptyArray<T> = [T, ...T[]];
 
 export class NonEmptyArrayError extends Error {
 	name = 'NonEmptyArrayError';
-	constructor(message: string) {
-		super(message);
-	}
 }
 
 export namespace NonEmptyArray {
