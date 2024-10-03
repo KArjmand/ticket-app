@@ -4,6 +4,7 @@ import express, {
 	type Request,
 	type Response,
 } from 'express';
+import { ZodError } from 'zod';
 import type { ForbiddenError, NotFoundError } from './constants/errors';
 import AppDataSource from './db/data-source';
 import { NODE_ENV, PORT } from './environments';
@@ -28,9 +29,10 @@ const main = async () => {
 		},
 	);
 	// register express routes from defined application routes
-	Routes.forEach((route) => {
+	for (const route of Routes) {
 		app[route.method](
 			route.route,
+			...(route?.middlewares || []),
 			(req: Request, res: Response, next: NextFunction) => {
 				const result = route.controller[route.action](req, res, next);
 				if (result instanceof Promise) {
@@ -40,18 +42,26 @@ const main = async () => {
 								? res.send(result)
 								: undefined,
 						)
-						.catch((err) =>
-							res.status(err.statusCode).send({
+						.catch((err) => {
+							console.log({ err });
+							if (err instanceof ZodError) {
+								return res.status(400).send({
+									message: 'Validation error',
+									errors: err.issues,
+								});
+							}
+							res.status(err.statusCode || 500).send({
 								error: err.message,
 								message: err.message,
-							}),
-						);
+							});
+						});
 				} else if (result !== null && result !== undefined) {
 					res.json(result);
 				}
 			},
 		);
-	});
+	}
+
 	app
 		.listen(PORT, () => {
 			console.log('Server running at PORT: ', PORT);

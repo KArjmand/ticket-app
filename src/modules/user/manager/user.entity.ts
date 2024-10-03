@@ -53,4 +53,16 @@ export class UserEntity {
 			.transform((user): LoggedInUser => user)
 			.parse(this);
 	}
+
+	ToSimple() {
+		const simple = z
+			.object({
+				id: User.Id.zod.brand<'AuthorizedUserId'>(),
+				firstName: z.string(),
+				lastName: z.string(),
+			})
+			.transform((u): User.Simple => u)
+			.parse(this);
+		return simple;
+	}
 }

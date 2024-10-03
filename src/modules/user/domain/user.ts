@@ -5,6 +5,7 @@ import type { NonEmptyString } from '../../../types/non-empty-string';
 import type { Password } from '../../auth/domain/password';
 
 export type User = User.Admin | User.Operator | User.User;
+export type UserId = User.Id;
 export namespace User {
 	export const Id = IdMaker.mk<'UserId'>();
 	export type Id = IdMaker.Infer<typeof Id>;
@@ -25,5 +26,14 @@ export namespace User {
 	}
 	export interface Operator extends Base {
 		accessLevel: AccessLevel.Enum['Operator'];
+	}
+
+	export type Simple = Simple.T;
+	export namespace Simple {
+		export interface T {
+			id: Id;
+			firstName?: string;
+			lastName?: string;
+		}
 	}
 }
